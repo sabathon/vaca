@@ -17,6 +17,7 @@ jobs:
 
     outputs:
       output1: ${{ steps.step1.outputs.test }}
+      image: ${{ steps.package.outputs.image }}
     
     steps:
     - uses: actions/checkout@v2
@@ -30,6 +31,9 @@ jobs:
   
     - id: step1
       run: echo "::set-output name=test::world"
+      
+    - id: package
+      run: echo "::set-output name=image::image-${{ github.sha }}"
   
   deploy:
 
@@ -40,5 +44,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Deploy
       run: |
-        echo $TEST_SECRET $TEST_VAR
-        echo ${{needs.build.outputs.output1}}
+        echo "B $TEST_SECRET $TEST_VAR"
+        echo "A ${{needs.build.outputs.output1}}"
+        echo "C ${{needs.build.outputs.image}}"
