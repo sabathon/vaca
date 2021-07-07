@@ -8,11 +8,21 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'    
 env:
   TEST_VAR: variable_test
+
 jobs:
   build:
-
+    environment: development
     runs-on: ubuntu-latest
 
     outputs:
@@ -36,7 +46,7 @@ jobs:
       run: echo "::set-output name=image::image-${{ github.sha }}"
   
   deploy:
-
+    environment: staging
     runs-on: ubuntu-latest
     needs: build
     
@@ -47,3 +57,4 @@ jobs:
         echo "B $TEST_SECRET $TEST_VAR"
         echo "A ${{needs.build.outputs.output1}}"
         echo "C ${{needs.build.outputs.image}}"
+        echo "Version: ${{ github.event.inputs.version }}"
