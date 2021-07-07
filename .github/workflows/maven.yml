@@ -41,4 +41,4 @@ jobs:
     - name: Deploy
       run: |
         echo $TEST_SECRET $TEST_VAR
-        echo ${{needs.job1.outputs.output1}}
+        echo ${{needs.build.outputs.output1}}
